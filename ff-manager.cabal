@@ -1,0 +1,78 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+
+name:           ff-manager
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/fetsh-edu/ff-manager#readme>
+homepage:       https://github.com/fetsh-edu/ff-manager#readme
+bug-reports:    https://github.com/fetsh-edu/ff-manager/issues
+author:         fetsh
+maintainer:     me@fetsh.me
+copyright:      2021 fetsh
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/fetsh-edu/ff-manager
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_ff_manager
+  hs-source-dirs:
+      src
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , http-client
+    , http-client-tls
+    , http-conduit
+    , time
+  default-language: Haskell2010
+
+executable ff-manager-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_ff_manager
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , ff-manager
+    , http-client
+    , http-client-tls
+    , http-conduit
+    , time
+  default-language: Haskell2010
+
+test-suite ff-manager-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_ff_manager
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , ff-manager
+    , http-client
+    , http-client-tls
+    , http-conduit
+    , time
+  default-language: Haskell2010
