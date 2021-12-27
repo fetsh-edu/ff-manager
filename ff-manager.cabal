@@ -25,7 +25,10 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Config
+      FreeFeed.Api
+      FreeFeed.Types
+      Time
   other-modules:
       Paths_ff_manager
   hs-source-dirs:
@@ -34,6 +37,8 @@ library
       aeson
     , base >=4.7 && <5
     , bytestring
+    , directory
+    , filepath
     , http-client
     , http-client-tls
     , http-conduit
@@ -51,7 +56,9 @@ executable ff-manager-exe
       aeson
     , base >=4.7 && <5
     , bytestring
+    , directory
     , ff-manager
+    , filepath
     , http-client
     , http-client-tls
     , http-conduit
@@ -70,7 +77,9 @@ test-suite ff-manager-test
       aeson
     , base >=4.7 && <5
     , bytestring
+    , directory
     , ff-manager
+    , filepath
     , http-client
     , http-client-tls
     , http-conduit
