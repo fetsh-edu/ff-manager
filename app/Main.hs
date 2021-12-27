@@ -4,7 +4,7 @@ import Data.Time.Clock(UTCTime)
 import Config (Token, getToken, getConfig)
 import FreeFeed.Types
 import FreeFeed.Api
-import Time (getUTCTime, older30m)
+import Time (getUTCTime, olderMinutes)
 
 allPosts :: Token -> String -> IO [Post]
 allPosts token user = go False 0 []
@@ -24,4 +24,4 @@ main = do
 
 older30mPosts :: UTCTime -> [Post] -> [Post]
 older30mPosts currentTime =
-    filter (\p -> older30m (createdAtUTCTime p) currentTime)
+    filter (\p -> olderMinutes 30 (createdAtUTCTime p) currentTime)

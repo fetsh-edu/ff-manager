@@ -1,7 +1,7 @@
 module Time where
 
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime, getPOSIXTime)
-import Data.Time.Clock (UTCTime, diffUTCTime)
+import Data.Time.Clock (UTCTime, diffUTCTime, NominalDiffTime)
 
 epochToUTC :: Integral a => a -> UTCTime
 epochToUTC = posixSecondsToUTCTime . fromIntegral
@@ -11,5 +11,5 @@ getUTCTime = do
   posix <- round <$> getPOSIXTime :: IO Int
   pure (epochToUTC posix)
 
-older30m :: UTCTime -> UTCTime -> Bool
-older30m old current = diffUTCTime current old / 60 > 3
+olderMinutes :: NominalDiffTime -> UTCTime -> UTCTime -> Bool
+olderMinutes min' old current = diffUTCTime current old / 60 > min'
