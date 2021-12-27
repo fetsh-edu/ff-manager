@@ -1,6 +1,5 @@
 module Main where
 
-import Data.Time.Clock(UTCTime)
 import Config (Token, getToken, getConfig)
 import FreeFeed.Types
 import FreeFeed.Api
@@ -19,9 +18,4 @@ main :: IO [DeleteResult]
 main = do
     token <- getToken <$> getConfig
     currentTime <- getUTCTime
-    allPosts token "30m" >>= mapM (removePost token) . older30mPosts currentTime
-
-
-older30mPosts :: UTCTime -> [Post] -> [Post]
-older30mPosts currentTime =
-    filter (\p -> olderMinutes 30 (createdAtUTCTime p) currentTime)
+    allPosts token "30m" >>= mapM (removePost token) . filter (\p -> olderMinutes 30 (createdAtUTCTime p) currentTime)
