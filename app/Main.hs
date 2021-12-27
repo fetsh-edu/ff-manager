@@ -18,4 +18,9 @@ main :: IO [DeleteResult]
 main = do
     token <- getToken <$> getConfig
     currentTime <- getUTCTime
-    allPosts token "30m" >>= mapM (removePost token) . filter (\p -> olderMinutes 30 (createdAtUTCTime p) currentTime)
+    deleteResults token "30m" 30 currentTime <> deleteResults token "24h" 1440 currentTime
+    where
+        deleteResults token group limit currentTime =
+            allPosts token group
+                >>= mapM (removePost token)
+                . filter (\p -> olderMinutes limit (createdAtUTCTime p) currentTime)
