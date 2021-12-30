@@ -24,3 +24,4 @@ main = do
             allPosts token group
                 >>= mapM (removePost token)
                 . filter (\p -> olderMinutes limit (createdAtUTCTime p) currentTime)
+                
