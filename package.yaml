@@ -29,6 +29,7 @@ dependencies:
 - time
 - filepath
 - directory
+- yaml
 
 library:
   source-dirs: src

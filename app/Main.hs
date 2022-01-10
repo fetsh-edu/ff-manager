@@ -1,27 +1,29 @@
 module Main where
 
 import Config (Token, getToken, getConfig)
-import FreeFeed.Types
 import FreeFeed.Api
-import Time (getUTCTime, olderMinutes)
+import Data.Time (UTCTime, NominalDiffTime, diffUTCTime, getCurrentTime)
 
 allPosts :: Token -> String -> IO [Post]
 allPosts token user = go False 0 []
-    where go lastPage offset posts' =
-            if lastPage then
-                return posts'
-            else do
+    where go lastPage offset posts'
+            | lastPage = return posts'
+            | otherwise = do
                 timeline' <- timeline token user offset
                 go (isLastPage timeline') (offset + 30) (posts' ++ posts timeline')
 
+deleteOldPosts :: Token -> String -> NominalDiffTime -> UTCTime -> IO [DeleteResult]
+deleteOldPosts token group limit currentTime =
+    allPosts token group
+        >>= mapM (removePost token)
+        . filter (\post -> diffUTCTime currentTime (createdAt post) > limit)
+
 main :: IO [DeleteResult]
 main = do
-    token <- getToken <$> getConfig
-    currentTime <- getUTCTime
-    deleteResults token "30m" 30 currentTime <> deleteResults token "24h" 1440 currentTime
-    where
-        deleteResults token group limit currentTime =
-            allPosts token group
-                >>= mapM (removePost token)
-                . filter (\p -> olderMinutes limit (createdAtUTCTime p) currentTime)
-                
+    eitherToken <- (fmap . fmap) getToken getConfig
+    case eitherToken of
+        Left exc -> fail $ "Could not parse file: " ++ show exc
+        Right token ->
+            getCurrentTime >>=
+                deleteOldPosts token "30m" (30 * 60)
+                <> deleteOldPosts token "24h" (24 * 60 * 60)
